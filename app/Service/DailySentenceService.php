@@ -39,7 +39,9 @@ class DailySentenceService
     public function getSentence() : string
     {
         if (empty($this->endPoint)) {
-            return 'Warning: Invalid Source Name';
+            $sourceNames = implode(', ', array_keys(config('endpoint.daily_sentence')));
+            // $sourceNames = json_encode(array_keys(config('endpoint.daily_sentence')));
+            return 'Warning, Invalid sourceNames! [Hints]: ' . $sourceNames;
         }
 
         try {
@@ -50,21 +52,22 @@ class DailySentenceService
             }
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
             $this->statusCode = $e->getCode();
-            $errMsg = 'Error ' . $e->getCode();
+            $errMsg = 'Error ' . $e->getCode() . ': ';
             if ($e->getCode() === 400) {
-                return $errMsg . ': Invalid Request. Please enter a username or a password.';
+                return $errMsg . 'Invalid Request. Please enter a username or a password.';
             } else if ($e->getCode() === 401) {
-                return $errMsg . ': Your credentials are incorrect. Please try again';
+                return $errMsg . 'Your credentials are incorrect. Please try again';
             } else if ($e->getCode() === 404) {
-                return $errMsg . ': Not Found';
+                return $errMsg . 'Not Found';
             } else if ($e->getCode() === 500) {
-                return $errMsg . ': Server Error';
+                return $errMsg . 'Server Error';
             } else {
-                return $errMsg . ': Bad Response';
+                return $errMsg . 'Bad Response';
             }
         } catch (\GuzzleHttp\Exception\ConnectException $e) {
             $this->statusCode = $e->getCode();
-            return 'Error: Connect Exception.';
+            $errMsg = 'Error ' . $e->getCode() . ': ';
+            return $errMsg . 'Connect Exception.';
         } catch (\Exception $e) {
             return 'Error: Unknown.';
         }
