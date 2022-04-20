@@ -13,21 +13,35 @@ class DailySentenceService
     public function __construct(Client $client)
     {
         $this->client = $client;
-        $this->statusCode = 0;
-    }
-
-    public function setEndPoint(String $endPoint) : void
-    {
-        $this->endPoint = $endPoint;
+        $this->statusCode = 200;
+        $this->endPoint = '';
     }
 
     /**
-     * Display a listing of the resource.
+     * set EndPoint
+     * @param string $sourceName
      *
-     * @return
+     * @return void
+     */
+    public function setEndPoint(String $sourceName) : void
+    {
+        $endpoints = config('endpoint.daily_sentence');
+        if (isset($endpoints[$sourceName])) {
+            $this->endPoint = $endpoints[$sourceName];
+        }
+    }
+
+    /**
+     * get A Sentence
+     *
+     * @return string
      */
     public function getSentence() : string
     {
+        if (empty($this->endPoint)) {
+            return 'Warning: Invalid Source Name';
+        }
+
         try {
             $response = $this->client->get($this->endPoint);
             if ($response->getStatusCode() == 200) {

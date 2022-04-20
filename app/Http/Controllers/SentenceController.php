@@ -8,14 +8,17 @@ use App\Service\DailySentenceService;
 class SentenceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * get Daily Sentence
+     * @param string $sourceName
      *
      * @return \Illuminate\Http\Response
      */
-    public function get()
+    public function get(Request $request)
     {
+        $sourceName = $request->input('sourceName', 'Metaphorpsum');
+
         $dailySentenceService = app(DailySentenceService::class);
-        $dailySentenceService->setEndPoint('http://metaphorpsum.com/sentences/3');
+        $dailySentenceService->setEndPoint($sourceName);
         $response = $dailySentenceService->getSentence();
         return response()->json($response, $dailySentenceService->statusCode);
     }
