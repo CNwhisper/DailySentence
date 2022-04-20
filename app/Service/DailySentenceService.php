@@ -40,7 +40,6 @@ class DailySentenceService
     {
         if (empty($this->endPoint)) {
             $sourceNames = implode(', ', array_keys(config('endpoint.daily_sentence')));
-            // $sourceNames = json_encode(array_keys(config('endpoint.daily_sentence')));
             return 'Warning, Invalid sourceNames! [Hints]: ' . $sourceNames;
         }
 
