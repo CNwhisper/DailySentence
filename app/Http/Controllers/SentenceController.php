@@ -16,6 +16,7 @@ class SentenceController extends Controller
     {
         $dailySentenceService = app(DailySentenceService::class);
         $dailySentenceService->setEndPoint('http://metaphorpsum.com/sentences/3');
-       return  $dailySentenceService->getSentence();
+        $response = $dailySentenceService->getSentence();
+        return response()->json($response, $dailySentenceService->statusCode);
     }
 }
