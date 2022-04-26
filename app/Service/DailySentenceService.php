@@ -52,8 +52,8 @@ class DailySentenceService
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
             $this->statusCode = $e->getCode();
             $errMsg = 'Error ' . $e->getCode() . ': ';
-            if ($e->getCode() === 400) {
-                return $errMsg . 'Invalid Request. Please enter a username or a password.';
+            if ($e->getCode() === 502) {
+                return $errMsg . 'Bad Gateway.';
             } else if ($e->getCode() === 401) {
                 return $errMsg . 'Your credentials are incorrect. Please try again';
             } else if ($e->getCode() === 404) {
